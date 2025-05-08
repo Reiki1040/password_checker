@@ -7,13 +7,50 @@
 </head>
 <body>
     <h1>パスワード強度チェッカー</h1>
+
     <form method="post">
-        <input type="text" name="password" placeholder="パスワードを入力" required>
+        <input type="password" name="password" id="pw-input" placeholder="パスワードを入力" required>
+        <button type="button" onclick="toggleInput()">表示切替</button>
         <button type="submit">判定</button>
     </form>
+
     {% if strength %}
-        <p>入力したパスワード: {{ password }}</p>
+    <p>
+        入力したパスワード: 
+        <span id="pw-display" data-password="{{ password }}"></span>
+        <button type="button" onclick="toggleDisplay('{{ password }}')">表示切替</button>
+    </p>
+    
         <p>強度: <strong>{{ strength }}</strong></p>
     {% endif %}
+
+    <script>
+        function toggleInput() {
+            const input = document.getElementById("pw-input");
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    
+        let isRevealed = false;
+        function toggleDisplay(pw) {
+            const span = document.getElementById("pw-display");
+            if (isRevealed) {
+                span.textContent = "●".repeat(pw.length);
+                isRevealed = false;
+            } else {
+                span.textContent = pw;
+                isRevealed = true;
+            }
+        }
+    
+        // 初期状態でマスキングを設定（ページ読み込み時）
+        window.onload = function() {
+            const pwSpan = document.getElementById("pw-display");
+            const pwText = pwSpan.getAttribute("data-password");
+            if (pwText) {
+                pwSpan.textContent = "●".repeat(pwText.length);
+            }
+        };
+    </script>
+    
 </body>
 </html>
