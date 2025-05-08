@@ -5,12 +5,13 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    strength = ""
     password = ""
+    result = None
     if request.method == "POST":
         password = request.form["password"]
-        strength = check_strength(password)
-    return render_template("index.html", password=password, strength=strength)
+        result = check_strength(password)
+    return render_template("index.html", password=password, result=result)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

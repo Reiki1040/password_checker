@@ -20,17 +20,20 @@ form {
     margin-bottom: 30px;
 }
 
+input[type="password"],
 input[type="text"] {
     padding: 10px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     width: 250px;
-    background-color: #1e1e1e;
-    color: #fff;
+    background-color: #1e1e1e;  /* 共通の背景色 */
+    color: #fff;                /* 白文字 */
     outline: none;
     box-shadow: 0 0 5px rgba(255,255,255,0.1);
+    transition: background-color 0.3s ease;
 }
+
 
 button {
     padding: 10px 15px;
