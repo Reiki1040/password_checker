@@ -14,10 +14,13 @@
         <button type="submit">判定</button>
     </form>
 
+    <!-- リアルタイム判定表示エリア -->
+    <div id="realtime-feedback" style="margin-top: 10px; color: #ccc;"></div>
+
     {% if password %}
         <p>
             入力したパスワード:
-            <span id="pw-display" data-password="{{ password }}">{{ "●" * password|length }}</span>
+            <span id="pw-display" data-password="{{ password }}">{{ "•" * password|length }}</span>
             <button type="button" onclick="toggleDisplay()">表示切替</button>
         </p>
     {% endif %}
@@ -45,7 +48,7 @@
             const span = document.getElementById("pw-display");
             const pw = span.getAttribute("data-password");
             if (isRevealed) {
-                span.textContent = "●".repeat(pw.length);
+                span.textContent = "•".repeat(pw.length);
                 isRevealed = false;
             } else {
                 span.textContent = pw;
@@ -57,9 +60,43 @@
             const span = document.getElementById("pw-display");
             if (span) {
                 const pw = span.getAttribute("data-password");
-                span.textContent = "●".repeat(pw.length);
+                span.textContent = "•".repeat(pw.length);
             }
         };
+
+        // リアルタイム強度判定
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById("pw-input");
+            const feedbackDiv = document.getElementById("realtime-feedback");
+
+            input.addEventListener("input", function () {
+                const pw = input.value;
+                let score = 0;
+                let feedback = [];
+
+                if (pw.length >= 8) score++;
+                else feedback.push("文字数が少ない（8文字以上推奨）");
+
+                if (/[a-z]/.test(pw)) score++;
+                else feedback.push("小文字を含めましょう");
+
+                if (/[A-Z]/.test(pw)) score++;
+                else feedback.push("大文字を含めましょう");
+
+                if (/[0-9]/.test(pw)) score++;
+                else feedback.push("数字を含めましょう");
+
+                if (/[^a-zA-Z0-9]/.test(pw)) score++;
+                else feedback.push("記号（!@#など）を含めましょう");
+
+                let strength = ["非常に弱い", "弱い", "普通", "強い", "非常に強い"][Math.min(score, 4)];
+
+                feedbackDiv.innerHTML = `
+                    <strong>強度:</strong> ${strength}<br>
+                    <ul>${feedback.map(msg => `<li>${msg}</li>`).join("")}</ul>
+                `;
+            });
+        });
     </script>
 </body>
 </html>
