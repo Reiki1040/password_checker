@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>パスワード強度チェッカー</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>パスワード強度チェッカー</h1>
+    <form method="post">
+        <input type="text" name="password" placeholder="パスワードを入力" required>
+        <button type="submit">判定</button>
+    </form>
+    {% if strength %}
+        <p>入力したパスワード: {{ password }}</p>
+        <p>強度: <strong>{{ strength }}</strong></p>
+    {% endif %}
+</body>
+</html>
